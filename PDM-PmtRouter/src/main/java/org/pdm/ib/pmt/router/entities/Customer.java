@@ -1,0 +1,56 @@
+package org.pdm.ib.pmt.router.entities;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.sql.Date;
+
+@Entity
+@Table(name = "CUSTOMERS")
+@Getter
+@ToString
+@EqualsAndHashCode
+public class Customer implements Serializable {
+
+    private static final long serialVersionUID = 2852515071912274053L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CUSTOMER_ID", updatable = false)
+    private Integer id;
+
+    @Column(name = "LAST_NAME", length = 35)
+    @NotNull
+    private String lastName;
+
+    @Column(name = "FIRST_NAME", length = 35)
+    @NotNull
+    private String firstName;
+
+    @Column(name = "BIRTH_DATE")
+    @NotNull
+    private Date birthDate;
+
+    @Column(name = "SERIAL_NUMBER", length = 13, unique = true)
+    @NotNull
+    private String serialNumber;
+
+    Customer() {
+
+    }
+
+    public Customer(@NotNull(message = "The constructor was called with null Last Name!") String lastName,
+                    @NotNull(message = "The constructor was called with null First Name!") String firstName,
+                    @NotNull(message = "The constructor was called with null Serial Number!") String serialNumber,
+                    @NotNull(message = "The constructor was called with null BirthDate!") Date birthDate) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.serialNumber = serialNumber;
+        this.birthDate = birthDate;
+    }
+
+}
