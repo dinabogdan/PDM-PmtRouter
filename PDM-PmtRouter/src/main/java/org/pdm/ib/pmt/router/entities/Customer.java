@@ -3,6 +3,7 @@ package org.pdm.ib.pmt.router.entities;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.pdm.ib.pmt.router.enumz.CustType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -39,6 +40,10 @@ public class Customer implements Serializable {
     @NotNull
     private String serialNumber;
 
+    @Column(name = "CUSTOMER_TYPE")
+    @Enumerated(EnumType.ORDINAL)
+    private CustType customerType;
+
     Customer() {
 
     }
@@ -46,11 +51,13 @@ public class Customer implements Serializable {
     public Customer(@NotNull(message = "The constructor was called with null Last Name!") String lastName,
                     @NotNull(message = "The constructor was called with null First Name!") String firstName,
                     @NotNull(message = "The constructor was called with null Serial Number!") String serialNumber,
-                    @NotNull(message = "The constructor was called with null BirthDate!") Date birthDate) {
+                    @NotNull(message = "The constructor was called with null BirthDate!") Date birthDate,
+                    @NotNull(message = "The constructor was called with null CustomerType") CustType customerType) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.serialNumber = serialNumber;
         this.birthDate = birthDate;
+        this.customerType = customerType;
     }
 
 }
