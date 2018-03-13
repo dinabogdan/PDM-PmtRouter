@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.ToString;
 import org.pdm.ib.pmt.router.converters.BigDecimalConverter;
 import org.pdm.ib.pmt.router.enumz.AcctType;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.Collection;
 
 @Entity
 @Table(name = "ACCOUNTS")
@@ -30,7 +30,7 @@ public class Account implements Serializable {
     @Column(name = "ACCT_NO", updatable = false, length = 10, unique = true)
     private Integer accountNumber;
 
-    @Column(name = "BALANCE", updatable = true)
+    @Column(name = "BALANCE")
     @Convert(converter = BigDecimalConverter.class)
     private BigDecimal balance;
 
@@ -38,8 +38,18 @@ public class Account implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private AcctType accountType;
 
-    @Column(name = "OPEN_DATE")
+    @Column(name = "OPEN_DATE", updatable = false)
     private Date openDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CUSTOMER_ID")
+    private Customer customer;
+
+    @OneToMany(mappedBy = "payerAccount", fetch = FetchType.LAZY)
+    private Collection<Transaction> payers;
+
+    @OneToMany(mappedBy = "receiverAccount", fetch = FetchType.LAZY)
+    private Collection<Transaction> receivers;
 
     Account() {
 

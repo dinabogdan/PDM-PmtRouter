@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "CUSTOMERS")
@@ -21,7 +22,7 @@ public class Customer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CUSTOMER_ID", updatable = false)
+    @Column(name = "CUSTOMER_ID", updatable = false, insertable = false, unique = true)
     private Integer id;
 
     @Column(name = "LAST_NAME", length = 35)
@@ -32,17 +33,20 @@ public class Customer implements Serializable {
     @NotNull
     private String firstName;
 
-    @Column(name = "BIRTH_DATE")
+    @Column(name = "BIRTH_DATE", updatable = false)
     @NotNull
     private Date birthDate;
 
-    @Column(name = "SERIAL_NUMBER", length = 13, unique = true)
+    @Column(name = "SERIAL_NUMBER", updatable = false, length = 13, unique = true)
     @NotNull
     private String serialNumber;
 
     @Column(name = "CUSTOMER_TYPE")
     @Enumerated(EnumType.ORDINAL)
     private CustType customerType;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Account> accounts;
 
     Customer() {
 

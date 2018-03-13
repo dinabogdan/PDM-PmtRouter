@@ -19,32 +19,28 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "TX_ID", updatable = false)
+    @Column(name = "TX_ID", updatable = false,  insertable = false, unique = true)
     private Integer txId;
 
-    @Column(name = "DEBIT_ACCT", length = 10)
-    private Integer debitAccount;
+    @Column(name = "PAYER_ACCT", updatable = false)
+    private Account payerAccount;
 
-    @Column(name = "CREDIT_ACCT", length = 10)
-    private Integer creditAccount;
+    @Column(name = "RECEIVER_ACCT", updatable = false)
+    private Account receiverAccount;
 
-    @Column(name = "SUM")
+    @Column(name = "SUM", updatable = false)
     @Convert(converter = BigDecimalConverter.class)
     private BigDecimal sum;
 
-    @Column(name = "PROCESS_DATE")
+    @Column(name = "PROCESS_DATE", updatable = false)
     private Date processDate;
 
     Transaction() {
 
     }
 
-    public Transaction(@NotNull(message = "The constructor was called with null DebitAccount!") Integer debitAccount,
-                       @NotNull(message = "The constructor was called with null CreditAccount!") Integer creditAccount,
-                       @NotNull(message = "The constructor was called with null Sum!") BigDecimal sum,
+    public Transaction(@NotNull(message = "The constructor was called with null Sum!") BigDecimal sum,
                        @NotNull(message = "The constructor was called with null ProcessDate!") Date processDate) {
-        this.debitAccount = debitAccount;
-        this.creditAccount = creditAccount;
         this.sum = sum;
         this.processDate = processDate;
     }

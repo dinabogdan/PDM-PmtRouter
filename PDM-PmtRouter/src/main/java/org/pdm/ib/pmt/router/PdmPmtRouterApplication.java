@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PdmPmtRouterApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PdmPmtRouterApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PdmPmtRouterApplication.class, args);
+    }
 }
