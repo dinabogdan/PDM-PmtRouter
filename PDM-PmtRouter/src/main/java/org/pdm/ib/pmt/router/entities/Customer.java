@@ -1,5 +1,6 @@
 package org.pdm.ib.pmt.router.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -45,6 +46,7 @@ public class Customer implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private CustType customerType;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Account> accounts;
 

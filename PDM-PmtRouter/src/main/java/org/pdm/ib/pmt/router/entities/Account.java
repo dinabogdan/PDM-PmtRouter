@@ -1,5 +1,6 @@
 package org.pdm.ib.pmt.router.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -45,9 +46,11 @@ public class Account implements Serializable {
     @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "payerAccount", fetch = FetchType.LAZY)
     private Collection<Transaction> payers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "receiverAccount", fetch = FetchType.LAZY)
     private Collection<Transaction> receivers;
 
