@@ -26,7 +26,7 @@ public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "ACCT_ID", updatable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "ACCT_NO", updatable = false, length = 10, unique = true)
     private Integer accountNumber;

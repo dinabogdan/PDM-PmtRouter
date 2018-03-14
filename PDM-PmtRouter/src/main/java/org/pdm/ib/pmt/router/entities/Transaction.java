@@ -20,12 +20,14 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TX_ID", updatable = false,  insertable = false, unique = true)
-    private Integer txId;
+    private Long txId;
 
-    @Column(name = "PAYER_ACCT", updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "PAYER_ACCT_NO", updatable = false)
     private Account payerAccount;
 
-    @Column(name = "RECEIVER_ACCT", updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "RECEIVER_ACCT_NO", updatable = false)
     private Account receiverAccount;
 
     @Column(name = "SUM", updatable = false)
