@@ -27,6 +27,7 @@ public class AccountResource {
 
     @GetMapping("/customers/{customerId}/accounts")
     public List<Account> getAllUsersAccounts(@PathVariable Long customerId) {
+        log.debug("### Enter: getAllUsersAccounts() for customerId: " + customerId);
         Optional<Customer> customer = customerRepository.findById(customerId);
         if (!customer.isPresent()) {
             throw new CustomerNotFoundException("The customer with id: " + customerId + " was not found!");
@@ -38,6 +39,7 @@ public class AccountResource {
 
     @GetMapping("/customers/{customerId}/accountsByAcctId/{accountId}")
     public Account getAccountById(@PathVariable Long customerId, @PathVariable Long accountId) {
+        log.debug("### Enter: getAccountById() for customerId: " + customerId + " and accountId: " + accountId);
         Optional<Customer> customer = customerRepository.findById(customerId);
         if (!customer.isPresent()) {
             throw new CustomerNotFoundException("The customer with id: " + customerId + " was not found!");

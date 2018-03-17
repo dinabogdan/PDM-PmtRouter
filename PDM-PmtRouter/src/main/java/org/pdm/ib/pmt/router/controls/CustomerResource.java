@@ -37,7 +37,8 @@ public class CustomerResource {
             throw new CustomerNotFoundException("The customer with id: " + customerId + " was not found!");
         }*/
 
-        return customer.orElseThrow(() -> new CustomerNotFoundException("The customer with id: " + customerId + " was not found!"));
+        return customer.orElseThrow(() -> new CustomerNotFoundException(
+                "The customer with id: " + customerId + " was not found!"));
     }
 
 }
