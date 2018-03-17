@@ -36,7 +36,7 @@ public class Account implements Serializable {
     private BigDecimal balance;
 
     @Column(name = "ACCT_TYPE")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private AcctType accountType;
 
     @Column(name = "OPEN_DATE", updatable = false)
@@ -61,11 +61,13 @@ public class Account implements Serializable {
     public Account(@NotNull(message = "The constructor was called with null AccountNumber!") Integer accountNumber,
                    @NotNull(message = "The constructor was called with null Balance!") BigDecimal balance,
                    @NotNull(message = "The constructor was called with null AccountType!") AcctType accountType,
-                   @NotNull(message = "The constructor was called with null OpenDate!") Date openDate) {
+                   @NotNull(message = "The constructor was called with null OpenDate!") Date openDate,
+                   @NotNull(message = "The constructor was called with null Customer reference!") Customer customer) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.accountType = accountType;
         this.openDate = openDate;
+        this.customer = customer;
     }
 
 }

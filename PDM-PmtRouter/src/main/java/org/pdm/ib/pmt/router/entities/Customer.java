@@ -43,7 +43,7 @@ public class Customer implements Serializable {
     private String serialNumber;
 
     @Column(name = "CUSTOMER_TYPE")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private CustType customerType;
 
     @JsonIgnore

@@ -18,7 +18,7 @@ import java.sql.Date;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "TX_ID", updatable = false,  insertable = false, unique = true)
     private Long txId;
 
@@ -42,8 +42,12 @@ public class Transaction {
     }
 
     public Transaction(@NotNull(message = "The constructor was called with null Sum!") BigDecimal sum,
-                       @NotNull(message = "The constructor was called with null ProcessDate!") Date processDate) {
+                       @NotNull(message = "The constructor was called with null ProcessDate!") Date processDate,
+                       @NotNull(message = "The constructor was called with null PayerAccount reference!") Account payerAccount,
+                       @NotNull(message = "The constructor was called with null ReceiverAccount reference!") Account receiverAccount) {
         this.sum = sum;
         this.processDate = processDate;
+        this.payerAccount = payerAccount;
+        this.receiverAccount = receiverAccount;
     }
 }
