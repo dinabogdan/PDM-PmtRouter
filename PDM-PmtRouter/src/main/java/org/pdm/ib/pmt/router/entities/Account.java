@@ -44,6 +44,7 @@ public class Account implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CUSTOMER_ID")
+    @JsonIgnore
     private Customer customer;
 
     @JsonIgnore
