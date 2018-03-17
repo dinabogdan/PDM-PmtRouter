@@ -33,11 +33,11 @@ public class CustomerResource {
         log.debug("### Enter: getCustomerById() for id: " + customerId);
         Optional<Customer> customer = customerRepository.findById(customerId);
 
-        if (!customer.isPresent()) {
+        /*if (!customer.isPresent()) {
             throw new CustomerNotFoundException("The customer with id: " + customerId + " was not found!");
-        }
+        }*/
 
-        return customer.get();
+        return customer.orElseThrow(() -> new CustomerNotFoundException("The customer with id: " + customerId + " was not found!"));
     }
 
 }

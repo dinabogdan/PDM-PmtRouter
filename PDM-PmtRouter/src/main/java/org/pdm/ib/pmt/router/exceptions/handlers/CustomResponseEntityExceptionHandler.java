@@ -1,6 +1,7 @@
 package org.pdm.ib.pmt.router.exceptions.handlers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.pdm.ib.pmt.router.exceptions.CustAccountNotFoundException;
 import org.pdm.ib.pmt.router.exceptions.CustomerNotFoundException;
 import org.pdm.ib.pmt.router.exceptions.responses.ExceptionResponse;
 import org.springframework.http.HttpStatus;
@@ -9,14 +10,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.xml.ws.Response;
 import java.util.Date;
 
 @Slf4j
 @RestController
 @ControllerAdvice
-public class CustomResponseEntityExceptionHandler {
+public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     private final ResponseEntity handleAllExceptions(Exception exception, WebRequest request) {
@@ -38,6 +39,18 @@ public class CustomResponseEntityExceptionHandler {
                 customerNotFoundException.getMessage(),
                 webRequest.getDescription(false));
 
-        return new ResponseEntity(customerNotFoundException, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CustAccountNotFoundException.class)
+    private final ResponseEntity handleAccountNotFoundException
+            (CustAccountNotFoundException custAccountNotFoundException, WebRequest webRequest) {
+        log.error("### Oups! We have a CustAccountNotFoundException!");
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(),
+                custAccountNotFoundException.getMessage(),
+                webRequest.getDescription(false));
+
+        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 }
