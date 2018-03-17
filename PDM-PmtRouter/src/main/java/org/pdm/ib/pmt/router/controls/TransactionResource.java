@@ -6,6 +6,7 @@ import org.pdm.ib.pmt.router.entities.Customer;
 import org.pdm.ib.pmt.router.entities.Transaction;
 import org.pdm.ib.pmt.router.exceptions.CustAccountNotFoundException;
 import org.pdm.ib.pmt.router.exceptions.CustomerNotFoundException;
+import org.pdm.ib.pmt.router.exceptions.TransactionNotFoundException;
 import org.pdm.ib.pmt.router.repos.AccountRepository;
 import org.pdm.ib.pmt.router.repos.CustomerRepository;
 import org.pdm.ib.pmt.router.repos.TransactionRepository;
@@ -89,5 +90,30 @@ public class TransactionResource {
                 + customerId + " and accountNumber: "
                 + accountNumber + " and transactionId: "
                 + transactionId);
+        Optional<Customer> customer = customerRepository.findById(customerId);
+        if (!customer.isPresent()) {
+            throw new CustomerNotFoundException("The customer with id: " + customerId + " was not found!");
+        }
+
+        Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
+        if (!account.isPresent()) {
+            throw new CustAccountNotFoundException("The account with number: " + accountNumber + " was not found!");
+        }
+
+        Optional<Transaction> transaction = transactionRepository.findById(transactionId);
+        if (!transaction.isPresent()) {
+            throw new TransactionNotFoundException("The transaction with id: " + transactionId + " was not found!");
+        }
+
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.addAll(account.get().getPayers());
+        transactions.addAll(account.get().getReceivers());
+        Transaction txToReturn = transactions.
+                stream().
+                filter(t -> t.getTxId().equals(transactionId)).
+                findFirst().
+                get();
+
+        return txToReturn;
     }
 }

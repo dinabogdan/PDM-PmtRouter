@@ -3,6 +3,7 @@ package org.pdm.ib.pmt.router.exceptions.handlers;
 import lombok.extern.slf4j.Slf4j;
 import org.pdm.ib.pmt.router.exceptions.CustAccountNotFoundException;
 import org.pdm.ib.pmt.router.exceptions.CustomerNotFoundException;
+import org.pdm.ib.pmt.router.exceptions.TransactionNotFoundException;
 import org.pdm.ib.pmt.router.exceptions.responses.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,19 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
                 new Date(),
                 custAccountNotFoundException.getMessage(),
                 webRequest.getDescription(false));
+
+        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TransactionNotFoundException.class)
+    private final ResponseEntity handleTransactionNotFoundException
+            (TransactionNotFoundException transactionNotFoundException, WebRequest webRequest){
+        log.error("### Oups! We have a TransactionNotFoundException!");
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+            new Date(),
+            transactionNotFoundException.getMessage(),
+            webRequest.getDescription(false)
+        );
 
         return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
     }
