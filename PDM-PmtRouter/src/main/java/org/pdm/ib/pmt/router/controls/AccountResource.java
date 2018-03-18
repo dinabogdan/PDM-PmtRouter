@@ -8,10 +8,12 @@ import org.pdm.ib.pmt.router.exceptions.CustomerNotFoundException;
 import org.pdm.ib.pmt.router.repos.AccountRepository;
 import org.pdm.ib.pmt.router.repos.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,6 +82,27 @@ public class AccountResource {
         }
 
         return null;
+    }
+
+    @PostMapping("/customers/{customerId}/accounts")
+    public ResponseEntity<Object> addNewAccount(@PathVariable Long customerId,
+                                                @Valid @RequestBody Account account) {
+        log.debug("### Enter: addNewAccount() for customerId: " + customerId);
+        Optional<Customer> customer = customerRepository.findById(customerId);
+        if (!customer.isPresent()) {
+            throw new CustomerNotFoundException("The customer with id: " + customerId + " was not found!");
+        }
+
+        Customer customerEntity = customer.get();
+        account.setCustomer(customerEntity);
+        Account savedAccount = accountRepository.save(account);
+        URI location = ServletUriComponentsBuilder.
+                fromCurrentRequest().
+                path("/{id}").
+                buildAndExpand(savedAccount.getId()).
+                toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
 }

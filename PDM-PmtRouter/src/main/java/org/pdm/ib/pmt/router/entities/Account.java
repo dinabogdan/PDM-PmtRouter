@@ -71,4 +71,8 @@ public class Account implements Serializable {
         this.customer = customer;
     }
 
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
 }
