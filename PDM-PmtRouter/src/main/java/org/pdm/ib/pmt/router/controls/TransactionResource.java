@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,14 +25,22 @@ import java.util.Optional;
 @RestController
 public class TransactionResource {
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
+    private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private TransactionRepository transactionRepository;
+    public TransactionResource(
+            @NotNull(message = "Customer Repository was not autowired in TransactionResource!")
+                    CustomerRepository customerRepository,
+            @NotNull(message = "Account Repository was not autowired in TransactionResource!")
+                    AccountRepository accountRepository,
+            @NotNull(message = "Transaction Repository was not autowired in TransactionResource!")
+                    TransactionRepository transactionRepository) {
+        this.customerRepository = customerRepository;
+        this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository;
+    }
 
     @GetMapping("/customers/{customerId}/accountsByAcctId/{accountId}/transactions")
     public List<Transaction> getAllTransactionForASpecificAccountByAcctId(
@@ -40,21 +49,21 @@ public class TransactionResource {
         log.debug("### Enter: getAllTransactionForASpecificAccountByAcctId() for customerId: "
                 + customerId + " and accountId: " + accountId);
 
-        Optional<Customer> customer = customerRepository.findById(customerId);
-        if (!customer.isPresent()) {
-            throw new CustomerNotFoundException("The customer with id: " + customerId + " was not found!");
-        }
-
-        Optional<Account> account = accountRepository.findById(accountId);
-        if (!account.isPresent()) {
-            throw new CustAccountNotFoundException("The account with id: " + accountId + " was not found!");
-        }
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+        optionalCustomer.orElseThrow(
+                () -> new CustomerNotFoundException(
+                        "The customer with id: " + customerId + " was not found!"
+                ));
+        Optional<Account> optionalAccount = accountRepository.findById(accountId);
+        Account account = optionalAccount.orElseThrow(
+                () -> new CustAccountNotFoundException(
+                        "The account with id: " + accountId + " was not found!"
+                ));
 
         List<Transaction> allTransactions = new ArrayList<>();
-        allTransactions.addAll(account.get().getPayers());
-        allTransactions.addAll(account.get().getReceivers());
-        List<Transaction> orderedTransactions = PDMRouterUtils.orderTransactions(allTransactions);
-        return orderedTransactions;
+        allTransactions.addAll(account.getPayers());
+        allTransactions.addAll(account.getReceivers());
+        return PDMRouterUtils.orderTransactions(allTransactions);
     }
 
     @GetMapping("/customers/{customerId}/accountsByAcctNo/{accountNumber}/transactions")
@@ -63,22 +72,22 @@ public class TransactionResource {
             @PathVariable Integer accountNumber) {
         log.debug("### Enter: getAllTransactionForASpecificAccountByAcctNo() for customerId: "
                 + customerId + " and accountNumber: " + accountNumber);
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+        optionalCustomer.orElseThrow(
+                () -> new CustomerNotFoundException(
+                        "The customer with id: " + customerId + " was not found!"
+                ));
 
-        Optional<Customer> customer = customerRepository.findById(customerId);
-        if (!customer.isPresent()) {
-            throw new CustomerNotFoundException("The customer with id: " + customerId + " was not found!");
-        }
-
-        Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
-        if (!account.isPresent()) {
-            throw new CustAccountNotFoundException("The account with id: " + accountNumber + " was not found!");
-        }
+        Optional<Account> optionalAccount = accountRepository.findByAccountNumber(accountNumber);
+        Account account = optionalAccount.orElseThrow(
+                () -> new CustAccountNotFoundException(
+                        "The account with id: " + accountNumber + " was not found!"
+                ));
 
         List<Transaction> allTransactions = new ArrayList<>();
-        allTransactions.addAll(account.get().getPayers());
-        allTransactions.addAll(account.get().getReceivers());
-        List<Transaction> orderedTransactions = PDMRouterUtils.orderTransactions(allTransactions);
-        return orderedTransactions;
+        allTransactions.addAll(account.getPayers());
+        allTransactions.addAll(account.getReceivers());
+        return PDMRouterUtils.orderTransactions(allTransactions);
     }
 
     @GetMapping("/customers/{customerId}/accountsByAcctNo/{accountNumber}/transactions/{transactionId}")
@@ -90,31 +99,32 @@ public class TransactionResource {
                 + customerId + " and accountNumber: "
                 + accountNumber + " and transactionId: "
                 + transactionId);
-        Optional<Customer> customer = customerRepository.findById(customerId);
-        if (!customer.isPresent()) {
-            throw new CustomerNotFoundException("The customer with id: " + customerId + " was not found!");
-        }
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+        optionalCustomer.orElseThrow(
+                () -> new CustomerNotFoundException(
+                        "The customer with id: " + customerId + " was not found!"
+                ));
 
-        Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
-        if (!account.isPresent()) {
-            throw new CustAccountNotFoundException("The account with number: " + accountNumber + " was not found!");
-        }
+        Optional<Account> optionalAccount = accountRepository.findByAccountNumber(accountNumber);
+        Account account = optionalAccount.orElseThrow(
+                () -> new CustAccountNotFoundException(
+                        "The account with id: " + accountNumber + " was not found!"
+                ));
 
-        Optional<Transaction> transaction = transactionRepository.findById(transactionId);
-        if (!transaction.isPresent()) {
-            throw new TransactionNotFoundException("The transaction with id: " + transactionId + " was not found!");
-        }
+        Optional<Transaction> optionalTransaction = transactionRepository.findById(transactionId);
+        optionalTransaction.orElseThrow(
+                () -> new TransactionNotFoundException(
+                        "The transaction with id: " + transactionId + " was not found!"
+                ));
 
         List<Transaction> transactions = new ArrayList<>();
-        transactions.addAll(account.get().getPayers());
-        transactions.addAll(account.get().getReceivers());
-        Transaction txToReturn = transactions.
+        transactions.addAll(account.getPayers());
+        transactions.addAll(account.getReceivers());
+        return transactions.
                 stream().
                 filter(t -> t.getTxId().equals(transactionId)).
                 findFirst().
                 get();
-
-        return txToReturn;
     }
 
 }

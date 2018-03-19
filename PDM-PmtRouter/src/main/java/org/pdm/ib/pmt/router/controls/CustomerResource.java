@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,13 @@ import java.util.Optional;
 @RestController
 public class CustomerResource {
 
+    private final CustomerRepository customerRepository;
+
     @Autowired
-    private CustomerRepository customerRepository;
+    public CustomerResource(@NotNull(message = "Customer Repository was not autowired in CustomerResource!")
+                                        CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     @GetMapping("/customers")
     public List<Customer> getAllCustomers() {
@@ -34,11 +40,6 @@ public class CustomerResource {
     public Customer getCustomerById(@PathVariable Long customerId) {
         log.debug("### Enter: getCustomerById() for id: " + customerId);
         Optional<Customer> customer = customerRepository.findById(customerId);
-
-        /*if (!customer.isPresent()) {
-            throw new CustomerNotFoundException("The customer with id: " + customerId + " was not found!");
-        }*/
-
         return customer.orElseThrow(() -> new CustomerNotFoundException(
                 "The customer with id: " + customerId + " was not found!"));
     }
