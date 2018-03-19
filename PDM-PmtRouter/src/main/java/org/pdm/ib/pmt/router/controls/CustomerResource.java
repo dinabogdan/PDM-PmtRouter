@@ -23,8 +23,8 @@ public class CustomerResource {
     private final CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerResource(@NotNull(message = "Customer Repository was not autowired in CustomerResource!")
-                                        CustomerRepository customerRepository) {
+    private CustomerResource(@NotNull(message = "Customer Repository was not autowired in CustomerResource!")
+                                     CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 

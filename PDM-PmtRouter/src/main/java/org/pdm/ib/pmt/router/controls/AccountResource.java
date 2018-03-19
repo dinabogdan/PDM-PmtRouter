@@ -26,7 +26,7 @@ public class AccountResource {
     private final AccountRepository accountRepository;
 
     @Autowired
-    public AccountResource(
+    private AccountResource(
             @NotNull(message = "Customer Repository was not autowired in AccountResource!")
                     CustomerRepository customerRepository,
             @NotNull(message = "Account Repository was not autowired in AccountResource!")

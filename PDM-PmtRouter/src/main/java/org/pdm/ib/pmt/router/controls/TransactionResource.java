@@ -30,7 +30,7 @@ public class TransactionResource {
     private final TransactionRepository transactionRepository;
 
     @Autowired
-    public TransactionResource(
+    private TransactionResource(
             @NotNull(message = "Customer Repository was not autowired in TransactionResource!")
                     CustomerRepository customerRepository,
             @NotNull(message = "Account Repository was not autowired in TransactionResource!")
