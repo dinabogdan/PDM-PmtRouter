@@ -109,5 +109,4 @@ public class AccountResource {
 
         return ResponseEntity.created(location).build();
     }
-
 }
