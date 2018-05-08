@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.pdm.ib.pmt.router.command.TransactionCommand;
 import org.pdm.ib.pmt.router.converters.BigDecimalConverter;
 
 import javax.persistence.*;
@@ -19,8 +20,8 @@ import java.sql.Date;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "TX_ID", updatable = false,  insertable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = "TX_ID", updatable = false, insertable = false, unique = true)
     private Long txId;
 
     @ManyToOne
