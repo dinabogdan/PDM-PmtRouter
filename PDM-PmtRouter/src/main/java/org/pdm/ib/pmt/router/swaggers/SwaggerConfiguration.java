@@ -18,7 +18,7 @@ public class SwaggerConfiguration {
             "www.github.com/dinabogdan",
             "bogdan.dina03@gmail.com");
 
-    private static final ApiInfo DEFAULT_API_INFO = new ApiInfo("PDMRouter REST API Swagger Documenttation",
+    private static final ApiInfo DEFAULT_API_INFO = new ApiInfo("PDMRouter REST API Swagger Documentation",
             "Here it's the documentation for all HTTP Requests",
             "1.0",
             "urn:tos",

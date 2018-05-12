@@ -4,11 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.pdm.ib.pmt.router.entities.Account;
 import org.pdm.ib.pmt.router.entities.Customer;
 import org.pdm.ib.pmt.router.entities.Transaction;
+import org.pdm.ib.pmt.router.entities.User;
 import org.pdm.ib.pmt.router.enumz.AcctType;
 import org.pdm.ib.pmt.router.enumz.CustType;
 import org.pdm.ib.pmt.router.repos.AccountRepository;
 import org.pdm.ib.pmt.router.repos.CustomerRepository;
 import org.pdm.ib.pmt.router.repos.TransactionRepository;
+import org.pdm.ib.pmt.router.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -29,8 +31,17 @@ public class PDMCommandLineRunner implements CommandLineRunner {
     @Autowired
     TransactionRepository txRepo;
 
+    @Autowired
+    UserRepository userRepo;
+
     @Override
     public void run(String... args) throws Exception {
+        User johnDoeUser = new User("john.doe", "foo", 1);
+        User freddyKruegerUser = new User("freddy.krueger", "bar", 2);
+
+        userRepo.save(johnDoeUser);
+        userRepo.save(freddyKruegerUser);
+
         Date johnDoeBirthDate = new Date(new java.util.Date().getTime());
         Date freddyKruegerBirthDate = new Date(new java.util.Date().getTime());
         Customer johnDoe = new Customer(
