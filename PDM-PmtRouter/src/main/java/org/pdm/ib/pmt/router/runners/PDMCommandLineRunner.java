@@ -1,22 +1,19 @@
 package org.pdm.ib.pmt.router.runners;
 
 import lombok.extern.slf4j.Slf4j;
-import org.pdm.ib.pmt.router.entities.Account;
-import org.pdm.ib.pmt.router.entities.Customer;
-import org.pdm.ib.pmt.router.entities.Transaction;
-import org.pdm.ib.pmt.router.entities.User;
+import org.pdm.ib.pmt.router.command.AccountBalanceCommand;
+import org.pdm.ib.pmt.router.entities.*;
 import org.pdm.ib.pmt.router.enumz.AcctType;
 import org.pdm.ib.pmt.router.enumz.CustType;
-import org.pdm.ib.pmt.router.repos.AccountRepository;
-import org.pdm.ib.pmt.router.repos.CustomerRepository;
-import org.pdm.ib.pmt.router.repos.TransactionRepository;
-import org.pdm.ib.pmt.router.repos.UserRepository;
+import org.pdm.ib.pmt.router.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 @Slf4j
 @Component
@@ -34,10 +31,92 @@ public class PDMCommandLineRunner implements CommandLineRunner {
     @Autowired
     UserRepository userRepo;
 
+    @Autowired
+    AccountBalanceRepository accountBalanceRepo;
+
     @Override
     public void run(String... args) throws Exception {
-        User johnDoeUser = new User("john.doe", "foo", 1);
-        User freddyKruegerUser = new User("freddy.krueger", "bar", 2);
+
+        AccountBalance balance1 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(1450))
+                .month(new GregorianCalendar(2017, 1, 1).getTime())
+                .build();
+
+        AccountBalance balance2 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(3356))
+                .month(new GregorianCalendar(2017, 2, 1).getTime())
+                .build();
+
+        AccountBalance balance3 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(2256))
+                .month(new GregorianCalendar(2017, 3, 1).getTime())
+                .build();
+
+        AccountBalance balance4 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(5556))
+                .month(new GregorianCalendar(2017, 4, 1).getTime())
+                .build();
+
+        AccountBalance balance5 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(6556))
+                .month(new GregorianCalendar(2017, 5, 1).getTime())
+                .build();
+
+        AccountBalance balance6 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(8956))
+                .month(new GregorianCalendar(2017, 6, 1).getTime())
+                .build();
+
+        AccountBalance balance7 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(8400))
+                .month(new GregorianCalendar(2017, 7, 1).getTime())
+                .build();
+
+        AccountBalance balance8 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(1200))
+                .month(new GregorianCalendar(2017, 8, 1).getTime())
+                .build();
+
+        AccountBalance balance9 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(3450))
+                .month(new GregorianCalendar(2017, 9, 1).getTime())
+                .build();
+
+        AccountBalance balance10 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(6500))
+                .month(new GregorianCalendar(2017, 10, 1).getTime())
+                .build();
+
+        AccountBalance balance11 = AccountBalance
+                .builder()
+                .balance(BigDecimal.valueOf(9209))
+                .month(new GregorianCalendar(2017, 11, 1).getTime())
+                .build();
+
+        accountBalanceRepo.save(balance1);
+        accountBalanceRepo.save(balance2);
+        accountBalanceRepo.save(balance3);
+        accountBalanceRepo.save(balance4);
+        accountBalanceRepo.save(balance5);
+        accountBalanceRepo.save(balance6);
+        accountBalanceRepo.save(balance7);
+        accountBalanceRepo.save(balance8);
+        accountBalanceRepo.save(balance9);
+        accountBalanceRepo.save(balance10);
+        accountBalanceRepo.save(balance11);
+
+        User johnDoeUser = new User("john.doe", "foo", "ACCESS_TOKEN", 1);
+        User freddyKruegerUser = new User("freddy.krueger", "bar", "ACCESS_TOKEN", 2);
 
         userRepo.save(johnDoeUser);
         userRepo.save(freddyKruegerUser);

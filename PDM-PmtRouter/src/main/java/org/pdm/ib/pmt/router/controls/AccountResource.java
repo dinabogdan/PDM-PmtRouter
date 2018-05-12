@@ -1,10 +1,13 @@
 package org.pdm.ib.pmt.router.controls;
 
 import lombok.extern.slf4j.Slf4j;
+import org.pdm.ib.pmt.router.command.AccountBalanceCommand;
 import org.pdm.ib.pmt.router.entities.Account;
+import org.pdm.ib.pmt.router.entities.AccountBalance;
 import org.pdm.ib.pmt.router.entities.Customer;
 import org.pdm.ib.pmt.router.exceptions.CustAccountNotFoundException;
 import org.pdm.ib.pmt.router.exceptions.CustomerNotFoundException;
+import org.pdm.ib.pmt.router.repos.AccountBalanceRepository;
 import org.pdm.ib.pmt.router.repos.AccountRepository;
 import org.pdm.ib.pmt.router.repos.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,15 +28,19 @@ public class AccountResource {
 
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
+    private final AccountBalanceRepository accountBalanceRepository;
 
     @Autowired
     private AccountResource(
             @NotNull(message = "Customer Repository was not autowired in AccountResource!")
                     CustomerRepository customerRepository,
             @NotNull(message = "Account Repository was not autowired in AccountResource!")
-                    AccountRepository accountRepository) {
+                    AccountRepository accountRepository,
+            @NotNull(message = "Account Balance Repository was not autowired in AccountResource!")
+                    AccountBalanceRepository accountBalanceRepository) {
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
+        this.accountBalanceRepository = accountBalanceRepository;
     }
 
 
@@ -108,5 +116,20 @@ public class AccountResource {
                 toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/balance")
+    public List<AccountBalanceCommand> getLastYearBalance() {
+        Iterable<AccountBalance> all = accountBalanceRepository.findAll();
+        List<AccountBalanceCommand> accountBalances = new ArrayList<>();
+        all.forEach(a -> {
+            AccountBalanceCommand accountBalanceCommand = AccountBalanceCommand.builder()
+                    .amount(a.getBalance())
+                    .month(a.getMonth())
+                    .build();
+            accountBalances.add(accountBalanceCommand);
+
+        });
+        return accountBalances;
     }
 }
