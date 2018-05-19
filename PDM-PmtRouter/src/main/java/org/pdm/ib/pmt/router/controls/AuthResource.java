@@ -31,7 +31,7 @@ public class AuthResource {
                     .build();
         } else {
             User userEntity = userOptional.get();
-            Optional<Customer> customerOptional = customerRepository.findById(userEntity.getId());
+            Optional<Customer> customerOptional = customerRepository.findById(Long.valueOf(userEntity.getReferenceId()));
             Customer customer = customerOptional.get();
             return AuthorizeResponse.builder()
                     .isAuthorized(true)

@@ -2,6 +2,7 @@ package org.pdm.ib.pmt.router.command;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import org.pdm.ib.pmt.router.entities.Customer;
 import org.pdm.ib.pmt.router.enumz.AcctType;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@Getter
 @Builder
 @ToString
 @EqualsAndHashCode

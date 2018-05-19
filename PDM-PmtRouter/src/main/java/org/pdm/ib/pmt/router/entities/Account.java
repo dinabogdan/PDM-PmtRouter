@@ -75,4 +75,8 @@ public class Account implements Serializable {
         this.customer = customer;
     }
 
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
 }

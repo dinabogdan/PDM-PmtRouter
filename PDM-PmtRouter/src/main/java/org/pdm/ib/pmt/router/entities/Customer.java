@@ -22,7 +22,6 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = 2852515071912274053L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "CUSTOMER_ID", updatable = false, insertable = false, unique = true)
     private Long id;
 
@@ -52,6 +51,15 @@ public class Customer implements Serializable {
 
     Customer() {
 
+    }
+
+    public Customer(Long id, @NotNull String lastName, @NotNull String firstName, @NotNull Date birthDate, @NotNull String serialNumber, CustType customerType) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.birthDate = birthDate;
+        this.serialNumber = serialNumber;
+        this.customerType = customerType;
     }
 
     public Customer(@NotNull(message = "The constructor was called with null Last Name!") String lastName,

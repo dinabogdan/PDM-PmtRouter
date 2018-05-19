@@ -123,18 +123,18 @@ public class PDMCommandLineRunner implements CommandLineRunner {
 
         Date johnDoeBirthDate = new Date(new java.util.Date().getTime());
         Date freddyKruegerBirthDate = new Date(new java.util.Date().getTime());
-        Customer johnDoe = new Customer(
+        Customer johnDoe = new Customer(1L,
                 "John",
                 "Doe",
-                "1950503410039",
                 johnDoeBirthDate,
+                "1950503410039",
                 CustType.INDIVIDUAL);
 
-        Customer freddyKruger = new Customer(
+        Customer freddyKruger = new Customer(2L,
                 "Freddy",
                 "Krugger",
-                "1950503410040",
                 freddyKruegerBirthDate,
+                "1950503410040",
                 CustType.INDIVIDUAL);
 
         custRepo.save(johnDoe);
@@ -150,7 +150,7 @@ public class PDMCommandLineRunner implements CommandLineRunner {
         Account johnDoeAcct2 = new Account(
                 123457,
                 new BigDecimal(1000),
-                AcctType.CURRENT_ACCOUNT,
+                AcctType.DEPOSIT_ACCOUNT,
                 new Date(new java.util.Date().getTime()),
                 johnDoe);
 

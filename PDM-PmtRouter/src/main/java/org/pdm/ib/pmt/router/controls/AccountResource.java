@@ -2,6 +2,7 @@ package org.pdm.ib.pmt.router.controls;
 
 import lombok.extern.slf4j.Slf4j;
 import org.pdm.ib.pmt.router.command.AccountBalanceCommand;
+import org.pdm.ib.pmt.router.command.AccountCommand;
 import org.pdm.ib.pmt.router.entities.Account;
 import org.pdm.ib.pmt.router.entities.AccountBalance;
 import org.pdm.ib.pmt.router.entities.Customer;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +120,7 @@ public class AccountResource {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping("/balance")
+    @GetMapping("/balances")
     public List<AccountBalanceCommand> getLastYearBalance() {
         Iterable<AccountBalance> all = accountBalanceRepository.findAll();
         List<AccountBalanceCommand> accountBalances = new ArrayList<>();
@@ -131,5 +133,21 @@ public class AccountResource {
 
         });
         return accountBalances;
+    }
+
+    @PostMapping("/update-balance/{transaction}")
+    public void updateBalance(@PathVariable BigDecimal transaction, @RequestBody AccountCommand accountCommand) {
+        Optional<Account> optionalAccount = accountRepository.findByAccountNumber(accountCommand.getAccountNumber());
+        Account account = null;
+        if (optionalAccount.isPresent()) {
+            account = optionalAccount.get();
+        } else {
+            throw new CustAccountNotFoundException("The account with number " + accountCommand.getAccountNumber() + " was not found!");
+        }
+
+        BigDecimal actualBalance = account.getBalance();
+        actualBalance = actualBalance.subtract(transaction);
+        account.setBalance(actualBalance);
+        accountRepository.save(account);
     }
 }
