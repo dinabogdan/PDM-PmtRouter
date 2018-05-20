@@ -4,17 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.pdm.ib.pmt.router.entities.Account;
 import org.pdm.ib.pmt.router.entities.Customer;
 import org.pdm.ib.pmt.router.entities.Transaction;
+import org.pdm.ib.pmt.router.entities.Tx;
 import org.pdm.ib.pmt.router.exceptions.CustAccountNotFoundException;
 import org.pdm.ib.pmt.router.exceptions.CustomerNotFoundException;
 import org.pdm.ib.pmt.router.exceptions.TransactionNotFoundException;
 import org.pdm.ib.pmt.router.repos.AccountRepository;
 import org.pdm.ib.pmt.router.repos.CustomerRepository;
 import org.pdm.ib.pmt.router.repos.TransactionRepository;
+import org.pdm.ib.pmt.router.repos.TxRepository;
 import org.pdm.ib.pmt.router.utils.PDMRouterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -28,6 +28,9 @@ public class TransactionResource {
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+
+    @Autowired
+    private TxRepository txRepository;
 
     @Autowired
     private TransactionResource(
@@ -125,6 +128,19 @@ public class TransactionResource {
                 filter(t -> t.getTxId().equals(transactionId)).
                 findFirst().
                 get();
+    }
+
+    @GetMapping("/transactions")
+    public List<Tx> getTransactions() {
+        List<Tx> txes = new ArrayList<>();
+        Iterable<Tx> all = txRepository.findAll();
+        all.forEach(t -> txes.add(t));
+        return txes;
+    }
+
+    @PostMapping("/transactions")
+    public void addTransactions(@RequestBody Tx tx) {
+        txRepository.save(tx);
     }
 
 }

@@ -34,6 +34,9 @@ public class PDMCommandLineRunner implements CommandLineRunner {
     @Autowired
     AccountBalanceRepository accountBalanceRepo;
 
+    @Autowired
+    TxRepository txRepository;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -172,5 +175,21 @@ public class PDMCommandLineRunner implements CommandLineRunner {
                 freddyKrugerAcct1);
 
         txRepo.save(tx1);
+
+        Tx firstTx = new Tx();
+        firstTx.setAmount(BigDecimal.valueOf(100));
+        firstTx.setName("Dina Bogdan");
+
+        Tx secondTx = new Tx();
+        secondTx.setAmount(BigDecimal.valueOf(61));
+        secondTx.setName("Chihaia Alex");
+
+        Tx thirdTx = new Tx();
+        thirdTx.setAmount(BigDecimal.valueOf(120));
+        thirdTx.setName("Burchi Sebastian");
+
+        txRepository.save(firstTx);
+        txRepository.save(secondTx);
+        txRepository.save(thirdTx);
     }
 }

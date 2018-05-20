@@ -137,6 +137,7 @@ public class AccountResource {
 
     @PostMapping("/update-balance/{transaction}")
     public void updateBalance(@PathVariable BigDecimal transaction, @RequestBody AccountCommand accountCommand) {
+        System.out.println("A intrat");
         Optional<Account> optionalAccount = accountRepository.findByAccountNumber(accountCommand.getAccountNumber());
         Account account = null;
         if (optionalAccount.isPresent()) {
