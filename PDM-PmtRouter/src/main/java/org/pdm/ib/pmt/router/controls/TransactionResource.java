@@ -140,6 +140,7 @@ public class TransactionResource {
 
     @PostMapping("/transactions")
     public void addTransactions(@RequestBody Tx tx) {
+        tx.setNotified(false);
         txRepository.save(tx);
     }
 

@@ -179,14 +179,17 @@ public class PDMCommandLineRunner implements CommandLineRunner {
         Tx firstTx = new Tx();
         firstTx.setAmount(BigDecimal.valueOf(100));
         firstTx.setName("Dina Bogdan");
+        firstTx.setNotified(true);
 
         Tx secondTx = new Tx();
         secondTx.setAmount(BigDecimal.valueOf(61));
         secondTx.setName("Chihaia Alex");
+        secondTx.setNotified(true);
 
         Tx thirdTx = new Tx();
         thirdTx.setAmount(BigDecimal.valueOf(120));
         thirdTx.setName("Burchi Sebastian");
+        thirdTx.setNotified(false);
 
         txRepository.save(firstTx);
         txRepository.save(secondTx);
